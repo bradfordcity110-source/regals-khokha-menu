@@ -1,99 +1,339 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Regal's Khokha Menu</title>
-
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Regal’s Khokha Menu</title>
 <style>
-body{
-margin:0;
-font-family:sans-serif;
-background:linear-gradient(to bottom,#0f172a,#020617);
-color:white;
-text-align:center;
-}
+  :root{
+    --bg1:#111827; /* gray-900 */
+    --bg2:#0b1028; /* blue-950-ish */
+    --bg3:#000000; /* black */
+    --card:#1f2937; /* gray-800 */
+    --card2:#111827;
+    --blue1:#2563eb; /* blue-600 */
+    --blue2:#1d4ed8; /* blue-700 */
+    --yellow:#facc15; /* yellow-400 */
+    --divider:#334155; /* slate-700 */
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color:#e5e7eb;
+    background: linear-gradient(to bottom, var(--bg1), var(--bg2), var(--bg3));
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+  .wrap{max-width:980px;margin:0 auto;width:100%}
+  header{padding:22px 14px 10px;text-align:center}
+  h1{margin:0;font-size:34px;letter-spacing:.2px}
+  .sub{margin-top:6px;color:#cbd5e1;font-size:16px}
 
-h1{
-padding:20px;
-font-size:28px;
-}
+  /* grid: 3 cols mobile, 4 cols desktop */
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap:12px;
+    padding:16px 14px 6px;
+  }
+  @media (min-width: 768px){
+    .grid{grid-template-columns: repeat(4, minmax(0,1fr));}
+  }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
-gap:12px;
-padding:20px;
-}
+  .btn{
+    position:relative;
+    border:1px solid rgba(255,255,255,.06);
+    background: rgba(31,41,55,.85);
+    color:#e5e7eb;
+    border-radius:14px;
+    padding:16px 10px;
+    font-size:12.5px; /* text-sm-ish */
+    line-height:1.15;
+    min-height:64px;
+    cursor:pointer;
+    transition: transform .12s ease, background .2s ease, border-color .2s ease;
+    user-select:none;
+  }
+  .btn:hover{transform: scale(1.03)}
+  .btn:active{transform: scale(.97)}
+  .btn.selected{
+    background: linear-gradient(135deg, var(--blue1), var(--blue2));
+    color:white;
+    border-color: rgba(255,255,255,.14);
+  }
 
-button{
-background:#1e293b;
-border:none;
-color:white;
-padding:15px;
-border-radius:12px;
-cursor:pointer;
-transition:0.2s;
-font-size:14px;
-}
+  /* qty badge */
+  @keyframes bounce {
+    0%{transform:scale(1)}
+    30%{transform:scale(1.35)}
+    60%{transform:scale(.92)}
+    100%{transform:scale(1)}
+  }
+  .badge{
+    position:absolute;
+    right:-7px;
+    top:-7px;
+    background: var(--yellow);
+    color:#111827;
+    font-weight:800;
+    font-size:12px;
+    padding:6px 10px;
+    border-radius:999px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.35);
+    animation: bounce .35s;
+  }
 
-button:hover{
-transform:scale(1.05);
-background:#2563eb;
-}
+  /* order card */
+  .card{
+    margin:14px 14px 90px;
+    background: rgba(31,41,55,.78);
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:18px;
+    padding:14px;
+  }
+  .cardhead{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:10px;
+  }
+  .cardtitle{font-size:26px;font-weight:800}
+  .reset{
+    border:none;
+    cursor:pointer;
+    color:white;
+    font-weight:800;
+    padding:10px 16px;
+    border-radius:14px;
+    background: linear-gradient(135deg, #ef4444, #b91c1c);
+    transition: transform .12s ease, filter .2s ease;
+  }
+  .reset:hover{transform:scale(1.03)}
+  .reset:active{transform:scale(.97)}
+  .list{margin:0;padding:0;list-style:none}
+  .row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:12px 0;
+    border-top:1px solid var(--divider);
+  }
+  .row:first-child{border-top:none}
+  .left{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    min-width:0;
+  }
+  .name{
+    font-size:18px;
+    font-weight:800;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    max-width: 56vw;
+  }
+  @media (min-width:768px){
+    .name{max-width:520px}
+  }
+  .line{
+    color:#cbd5e1;
+    font-size:14px;
+  }
+  .price{
+    color:#60a5fa;
+    font-weight:900;
+    font-size:22px;
+    margin-left:10px;
+    white-space:nowrap;
+  }
+  .controls{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .circle{
+    width:44px;height:44px;
+    border:none;
+    border-radius:999px;
+    color:white;
+    font-size:22px;
+    font-weight:900;
+    cursor:pointer;
+    transition: transform .12s ease, filter .2s ease;
+  }
+  .circle:hover{transform:scale(1.05)}
+  .circle:active{transform:scale(.95)}
+  .minus{background: linear-gradient(135deg, #ef4444, #b91c1c)}
+  .plus{background: linear-gradient(135deg, #3b82f6, #1d4ed8)}
 
-.order{
-padding:20px;
-border-top:1px solid #334155;
-}
-
-.total{
-font-size:22px;
-font-weight:bold;
-padding:20px;
-background:#2563eb;
-}
+  /* sticky total bottom */
+  .totalbar{
+    position:fixed;
+    left:0; right:0; bottom:0;
+    padding:16px 14px;
+    background: linear-gradient(135deg, var(--blue1), var(--blue2));
+    border-top:1px solid rgba(255,255,255,.12);
+  }
+  .totalinner{
+    max-width:980px;
+    margin:0 auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-size:28px;
+    font-weight:900;
+    color:white;
+  }
+  .totalvalue{font-size:34px}
+  /* small helper */
+  .muted{color:#cbd5e1;font-size:14px;margin:0 14px 4px;text-align:center}
 </style>
 </head>
-
 <body>
 
-<h1>Regal's Khokha Menu</h1>
+<div class="wrap">
+  <header>
+    <h1>Regal’s Khokha Menu</h1>
+    <div class="sub">Tap items to add to your order</div>
+  </header>
 
-<div class="grid">
-<button>Veg Pakora</button>
-<button>Ch Pakora</button>
-<button>Egg Pakora</button>
-<button>Naan Pakora</button>
-<button>Samosa’s</button>
-<button>Pasties</button>
-<button>Alo Tikki</button>
-<button>Chapli Kebab</button>
-<button>Shami Kebab</button>
-<button>Kachori</button>
-<button>Masala Mirch</button>
-<button>Masala Chips</button>
-<button>Drum Stick (2)</button>
-<button>Masala Fish</button>
-<button>Lahori Fish</button>
-<button>Full Chicken</button>
-<button>Half Chicken</button>
-<button>Biryani</button>
-<button>Malai Boti</button>
-<button>Dahi Bhally</button>
-<button>Rooh Afza</button>
-<button>Lassi</button>
-<button>Seekh Kebab (1)</button>
-<button>Seekh Kebab (5)</button>
-<button>Seekh Kebab (12)</button>
-<button>Chaat</button>
-<button>Bahlley</button>
-<button>Wings</button>
+  <div id="menu" class="grid"></div>
+
+  <div class="card">
+    <div class="cardhead">
+      <div class="cardtitle">Your Order</div>
+      <button class="reset" id="resetBtn">Reset</button>
+    </div>
+    <ul id="orderList" class="list"></ul>
+    <p id="emptyNote" class="muted" style="display:none;">No items selected yet.</p>
+  </div>
 </div>
 
-<div class="total">
-Menu Ready ✅
+<div class="totalbar">
+  <div class="totalinner">
+    <div>Total:</div>
+    <div>£<span class="totalvalue" id="total">0.00</span></div>
+  </div>
 </div>
 
+<script>
+const ITEMS = [
+  ["Veg Pakora",3.20],["Ch Pakora",3.70],["Egg Pakora",0.85],
+  ["Naan Pakora",1.50],["Samosa’s",1.50],["Pasties",1.70],
+  ["Alo Tikki",1.70],["Chapli Kebab",2.00],["Shami Kebab",1.70],
+  ["Kachori",2.90],["Masala Mirch",1.70],["Masala Chips",2.20],
+  ["Drum Stick (2)",2.40],["Masala Fish",8.50],["Lahori Fish",8.50],
+  ["Full Chicken",9.50],["Half Chicken",5.50],["Biryani",5.50],
+  ["Malai Boti",5.50],["Dahi Bhally",3.75],["Rooh Afza",4.50],
+  ["Lassi",7.00],["Seekh Kebab (1)",1.95],["Seekh Kebab (5)",8.50],
+  ["Seekh Kebab (12)",17.00],["Chaat",3.50],["Bahlley",3.50],["Wings",4.50]
+];
+
+const state = {}; // name -> qty
+const menuEl = document.getElementById("menu");
+const listEl = document.getElementById("orderList");
+const totalEl = document.getElementById("total");
+const emptyNote = document.getElementById("emptyNote");
+document.getElementById("resetBtn").addEventListener("click", resetAll);
+
+function money(n){ return n.toFixed(2); }
+
+function addItem(name){
+  state[name] = (state[name] || 0) + 1;
+  render();
+}
+
+function changeQty(name, delta){
+  state[name] = (state[name] || 0) + delta;
+  if(state[name] <= 0) delete state[name];
+  render();
+}
+
+function resetAll(){
+  for(const k in state) delete state[k];
+  render();
+}
+
+function render(){
+  // update buttons
+  [...menuEl.querySelectorAll("button")].forEach(btn=>{
+    const name = btn.dataset.name;
+    const qty = state[name] || 0;
+    btn.classList.toggle("selected", qty>0);
+    const existing = btn.querySelector(".badge");
+    if(existing) existing.remove();
+    if(qty>0){
+      const b = document.createElement("span");
+      b.className="badge";
+      b.textContent = qty;
+      btn.appendChild(b);
+    }
+  });
+
+  // order list
+  listEl.innerHTML = "";
+  let total = 0;
+
+  const entries = Object.entries(state);
+  emptyNote.style.display = entries.length ? "none" : "block";
+
+  for(const [name, qty] of entries){
+    const price = ITEMS.find(x=>x[0]===name)[1];
+    const lineTotal = price * qty;
+    total += lineTotal;
+
+    const li = document.createElement("li");
+    li.className = "row";
+
+    li.innerHTML = `
+      <div class="left">
+        <div class="name">${escapeHtml(name)} <span style="opacity:.6;font-weight:700">× ${qty}</span></div>
+        <div class="line">${escapeHtml(name)} × ${qty} = £${money(lineTotal)}</div>
+      </div>
+
+      <div class="controls">
+        <div class="price">£${money(price)}</div>
+        <button class="circle minus" aria-label="minus">−</button>
+        <button class="circle plus" aria-label="plus">+</button>
+      </div>
+    `;
+
+    li.querySelector(".minus").addEventListener("click", ()=>changeQty(name,-1));
+    li.querySelector(".plus").addEventListener("click", ()=>changeQty(name, 1));
+
+    listEl.appendChild(li);
+  }
+
+  totalEl.textContent = money(total);
+}
+
+function escapeHtml(str){
+  return str.replace(/[&<>"']/g, m => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+  }[m]));
+}
+
+// Build menu buttons once
+for(const [name] of ITEMS){
+  const btn = document.createElement("button");
+  btn.className = "btn";
+  btn.textContent = name;
+  btn.dataset.name = name;
+
+  btn.addEventListener("click", ()=>{
+    // click effect: down then up (already via :active + transition)
+    addItem(name);
+  });
+
+  menuEl.appendChild(btn);
+}
+
+render();
+</script>
 </body>
 </html>
