@@ -1,113 +1,227 @@
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Regal’s Khokha Menu</title>
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-@keyframes bounce {
-  0% { transform: scale(1); }
-  30% { transform: scale(1.3); }
-  60% { transform: scale(0.9); }
-  100% { transform: scale(1); }
-}
-.badge { animation: bounce .4s; }
-</style>
-</head>
-
-<body class="min-h-screen bg-gradient-to-b from-gray-900 via-blue-950 to-black text-white flex flex-col">
-
-<header class="text-center py-5 text-xl font-semibold">
-  Regal’s Khokha Menu
-</header>
-
-<main class="flex-1 px-4">
-  <div id="menu" class="grid grid-cols-3 md:grid-cols-4 gap-3 text-sm"></div>
-
-  <section class="mt-6">
-    <h2 class="font-semibold mb-2">Selected Items</h2>
-    <ul id="order" class="divide-y divide-gray-700"></ul>
-
-    <button onclick="resetAll()"
-      class="mt-3 w-full py-2 rounded bg-gradient-to-r from-red-600 to-red-800 transition hover:scale-105">
-      Reset
-    </button>
-  </section>
-</main>
-
-<footer class="sticky bottom-0 bg-gradient-to-r from-blue-700 to-blue-900 p-4 text-center text-xl font-bold">
-  Total: £<span id="total">0.00</span>
-</footer>
-
-<script>
-const items = [
- ["Veg Pakora",3.20],["Ch Pakora",3.70],["Egg Pakora",0.85],
- ["Naan Pakora",1.50],["Samosa’s",1.50],["Pasties",1.70],
- ["Alo Tikki",1.70],["Chapli Kebab",2.00],["Shami Kebab",1.70],
- ["Kachori",2.90],["Masala Mirch",1.70],["Masala Chips",2.20],
- ["Drum Stick (2)",2.40],["Masala Fish",8.50],["Lahori Fish",8.50],
- ["Full Chicken",9.50],["Half Chicken",5.50],["Biryani",5.50],
- ["Malai Boti",5.50],["Dahi Bhally",3.75],["Rooh Afza",4.50],
- ["Lassi",7.00],["Seekh Kebab (1)",1.95],
- ["Seekh Kebab (5)",8.50],["Seekh Kebab (12)",17.00],
- ["Chaat",3.50],["Bahlley",3.50],["Wings",4.50]
-];
-
-const state = {};
-const menu = document.getElementById("menu");
-const order = document.getElementById("order");
-const totalEl = document.getElementById("total");
-
-items.forEach(([name])=>{
-  const btn = document.createElement("button");
-  btn.className="relative py-3 rounded bg-gray-800 hover:scale-105 active:scale-95 transition";
-  btn.textContent=name;
-  btn.onclick=()=>{ state[name]=(state[name]||0)+1; render(); };
-  menu.appendChild(btn);
-});
-
-function render(){
-  order.innerHTML="";
-  let total=0;
-
-  document.querySelectorAll("#menu button").forEach(b=>{
-    const n=b.textContent;
-    b.classList.toggle("from-blue-600",state[n]);
-    b.classList.toggle("to-blue-800",state[n]);
-    b.classList.toggle("bg-gradient-to-r",state[n]);
-    b.querySelector("span")?.remove();
-    if(state[n]){
-      const s=document.createElement("span");
-      s.className="badge absolute top-1 right-1 bg-yellow-400 text-black text-xs px-2 rounded-full";
-      s.textContent=state[n];
-      b.appendChild(s);
-    }
-  });
-
-  for(const [name,qty] of Object.entries(state)){
-    const price=items.find(i=>i[0]==name)[1];
-    total+=price*qty;
-    const li=document.createElement("li");
-    li.className="flex justify-between py-2";
-    li.innerHTML=`
-      <span>${name} × ${qty} = £${(price*qty).toFixed(2)}</span>
-      <div>
-        <button onclick="change('${name}',-1)" class="px-2 bg-gray-700 rounded">−</button>
-        <button onclick="change('${name}',1)" class="px-2 bg-gray-700 rounded ml-1">+</button>
-      </div>`;
-    order.appendChild(li);
+  <head>
+    <meta charset="UTF-8" />
+    <title>Regal's Khokha Menu</title>
+    <meta name="description" content="Regal's Khokha Menu - Browse our delicious pakoras, kebabs, biryani and more. Easy ordering with automatic price calculation." />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <script type="module" crossorigin src="/assets/index-DPLgNiNi.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-DNiJAIED.css">
+    <script>(() => {
+  const u = "vite-error-reporter-plugin";
+  function f(n, r, o) {
+    return n.includes("Failed to fetch dynamically imported module") ? "module-load-error" : n === "Script error." ? "script-origin-error" : n.includes("ResizeObserver loop limit exceeded") ? "resize-observer-error" : n.includes("ReferenceError") ? "react-reference-error" : n.includes("TypeError") ? "react-type-error" : n.includes("is not defined") ? "react-reference-error" : n.includes("Cannot read prop") ? "react-property-error" : n.includes("Cannot access before initialization") ? "react-initialization-error" : n.includes("is not a function") ? "react-function-error" : o && o.includes("ErrorBoundary") ? "react-boundary-error" : r && r.includes("renderWithHooks") ? "react-render-error" : r && r.includes("updateFunctionComponent") ? "react-component-error" : r && r.includes("@react-refresh") ? "react-hmr-error" : "react-runtime-error";
   }
-  totalEl.textContent=total.toFixed(2);
-}
-
-function change(n,d){
-  state[n]+=d;
-  if(state[n]<=0) delete state[n];
-  render();
-}
-function resetAll(){ for(const k in state) delete state[k]; render(); }
-</script>
-</body>
+  function a(n) {
+    if (!n) return { file: null, line: null, column: null };
+    const r = [
+      /at\s+.*?\s+\(([^:]+):(\d+):(\d+)\)/,
+      // Chrome
+      /([^:@\s]+\.(?:tsx?|jsx?)):(\d+):(\d+)/,
+      // Chrome
+      /\(([^:]+):(\d+):(\d+)\)/,
+      // Chrome
+      /(\w+)?@([^:]+):(\d+):(\d+)/
+      // Firefox, Safari
+    ];
+    for (const o of r) {
+      const e = n.match(o);
+      if (e) {
+        const i = e[1] || e[2], t = parseInt(e[2] || e[3], 10), l = parseInt(e[3] || e[4], 10);
+        return { file: i, line: t, column: l };
+      }
+    }
+    return { file: null, line: null, column: null };
+  }
+  function c() {
+    try {
+      if (window.parent && window.parent !== window) return window.parent;
+      if (window.top && window.top !== window) return window.top;
+      if (window.opener) return window.opener;
+    } catch {
+      if (window.parent && window.parent !== window) return window.parent;
+    }
+    return null;
+  }
+  function d(n) {
+    const r = c();
+    r && r.postMessage(
+      {
+        type: "vite-error-report",
+        source: u,
+        errorData: n,
+        metadata: {
+          pluginVersion: "1.0.0",
+          reportingMethod: "postMessage",
+          timestamp: (/* @__PURE__ */ new Date()).toISOString()
+        }
+      },
+      "*"
+    );
+  }
+  function s(n) {
+    const r = a(n.stack), e = {
+      type: f(
+        n.message,
+        n.stack,
+        n.componentStack
+      ),
+      message: n.message,
+      file: r.file,
+      line: r.line,
+      column: r.column,
+      stack: n.stack,
+      componentStack: n.componentStack,
+      timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+      environment: "development",
+      source: n.source,
+      userAgent: navigator.userAgent,
+      url: window.location.href
+    };
+    d(e);
+  }
+  window.addEventListener(
+    "error",
+    function(n) {
+      try {
+        const r = n.target;
+        if (r && r instanceof HTMLElement) {
+          const o = r.tagName.toUpperCase(), e = r.src || r.href || "unknown";
+          s({
+            message: "Failed to load resource: " + o + " from " + e,
+            source: "resource-loader",
+            stack: null,
+            componentStack: null
+          });
+        } else {
+          const o = n;
+          s({
+            message: o.message || "Runtime error",
+            source: "window-onerror",
+            stack: o.error ? o.error.stack : null,
+            componentStack: null
+          });
+        }
+      } catch (r) {
+        console.error(
+          "[SG Preview - Reporter] Internal error in onerror handler:",
+          r
+        );
+      }
+    },
+    !0
+  ), window.addEventListener(
+    "unhandledrejection",
+    function(n) {
+      try {
+        const r = n.reason;
+        s({
+          message: r?.message || r || "Unhandled promise rejection",
+          source: "unhandled-rejection",
+          stack: r?.stack,
+          componentStack: null
+        });
+      } catch (r) {
+        console.error(
+          "[SG Preview - Reporter] Internal error in unhandledrejection handler:",
+          r
+        );
+      }
+    }
+  );
+  const p = console.error;
+  console.error = function(...n) {
+    try {
+      const r = n.join(" ");
+      if (r.includes(
+        "Error handled by React Router default ErrorBoundary"
+      ) || r.includes(
+        "React will try to recreate this component tree"
+      ) || r.includes("The above error occurred in the") || r.includes(
+        "React Router caught the following error during render"
+      ) || /Minified React error #\d+/.test(r) || r.includes("ResizeObserver loop limit exceeded")) {
+        const o = n.find((i) => i instanceof Error), e = n.find(
+          (i) => typeof i == "object" && i && "componentStack" in i
+        )?.componentStack;
+        s({
+          message: o ? o.message : r,
+          source: "console-error",
+          stack: o ? o.stack : null,
+          componentStack: e
+        });
+      }
+    } catch (r) {
+      console.error(
+        "[SG Preview - Reporter] Internal error in console.error wrapper:",
+        r
+      );
+    }
+    p.apply(console, n);
+  }, console.log("[SG Preview - Runtime Reporter] Initialized.");
+})();</script>
+    <script>(() => {
+  const a = new URLSearchParams(window.location.search).get("sgv");
+  if (!a) return;
+  function c(e) {
+    try {
+      if (!e) return e;
+      const i = window.location.origin, t = new URL(String(e), i);
+      return t.origin === i && t.searchParams.get("sgv") !== a ? (t.searchParams.set("sgv", a), t.href) : e;
+    } catch {
+      return e;
+    }
+  }
+  const d = window.open;
+  window.open = function(...e) {
+    return e[0] && (e[0] = c(e[0])), d.apply(this, e);
+  };
+  const s = window.location.assign.bind(window.location);
+  window.location.assign = function(e) {
+    s(c(e));
+  };
+  const p = window.location.replace.bind(window.location);
+  window.location.replace = function(e) {
+    p(c(e));
+  };
+  const n = history.pushState;
+  history.pushState = function(...e) {
+    return e[2] && (e[2] = c(e[2])), n.apply(this, e);
+  };
+  const r = history.replaceState;
+  history.replaceState = function(...e) {
+    return e[2] && (e[2] = c(e[2])), r.apply(this, e);
+  }, document.addEventListener(
+    "click",
+    (e) => {
+      const t = e.target?.closest("a");
+      if (!t || !t.href || t.href.startsWith("mailto:") || t.href.startsWith("tel:") || t.href.startsWith("javascript:"))
+        return;
+      const l = c(t.href), m = typeof l == "string" ? l : String(l);
+      t.href !== m && (t.href = m);
+    },
+    !0
+  ), document.addEventListener("submit", (e) => {
+    const i = e.target;
+    if (!i) return;
+    let t = i.querySelector(
+      'input[name="sgv"]'
+    );
+    t || (t = document.createElement("input"), t.type = "hidden", t.name = "sgv", i.appendChild(t)), t.value = a;
+  });
+  const o = () => {
+    document.querySelectorAll("a").forEach((e) => {
+      if (e.href && !e.href.startsWith("javascript")) {
+        const i = c(e.href);
+        e.href = typeof i == "string" ? i : String(i);
+      }
+    });
+  };
+  document.readyState === "complete" || document.readyState === "interactive" ? o() : document.addEventListener("DOMContentLoaded", o);
+})();</script>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>
